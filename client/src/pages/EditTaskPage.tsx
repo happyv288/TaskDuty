@@ -1,44 +1,35 @@
 import { useNavigate, useParams } from "react-router-dom";
 import type { TaskFormValues } from "../types/task";
 import TaskForm from "../components/TaskForm";
-
-
-const placeholderTasks: Record<string, TaskFormValues> = {
-  "1": {
-    title: "FinTech Website Update",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet quis nibh posuere non tempor. Erat mattis gravida pulvinar nibh aliquam faucibus et magna.",
-    dueDate: "2026-10-05",
-    category: "Urgent",
-  },
-  "2": {
-    title: "Agro Website Update",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet quis nibh posuere non tempor. Erat mattis gravida pulvinar nibh aliquam faucibus et magna.",
-    dueDate: "2026-10-12",
-    category: "Work",
-  },
-};
+import useTasks from "../hooks/useTasks";
 
 function EditTaskPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { tasks, updateTask } = useTasks();
 
-  const existingTask = (id && placeholderTasks[id]) || {
-    title: "",
-    description: "",
-    dueDate: "",
-    category: "Work" as const,
-  };
+  const task = tasks.find((task) => task.id === id);
+
+  const existingTask: TaskFormValues = task
+    ? {
+        title: task.title,
+        description: task.description,
+        dueDate: task.dueDate,
+        category: task.category,
+      }
+    : {
+        title: "",
+        description: "",
+        dueDate: "",
+        category: "Work",
+      };
 
   function handleSave(values: TaskFormValues) {
-    // TODO: replace with a PUT/PATCH /tasks/:id call once the server is
-    // ready. TaskForm already validated `values` — this is the only
-    // spot that needs to change.
-    console.log("Updated task:", id, values);
+    if (!id) return;
+
+    updateTask(id, values);
     navigate("/tasks");
   }
-
   return (
     <main className="max-w-5xl mx-auto px-6 py-8">
       <button

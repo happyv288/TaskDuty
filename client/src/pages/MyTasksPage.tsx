@@ -4,31 +4,10 @@ import type { Task, TaskCategory } from "../types/task";
 import TaskCard from "../components/TaskCard";
 import FilterBar from "../components/FilterBar";
 import type { CompletionFilter } from "../components/FilterBar";
-
-
-const initialTasks: Task[] = [
-  {
-    id: "1",
-    title: "FinTech Website Update",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet quis nibh posuere non tempor. Erat mattis gravida pulvinar nibh aliquam faucibus et magna.",
-    dueDate: "2026-10-05",
-    category: "Urgent",
-    completed: false,
-  },
-  {
-    id: "2",
-    title: "Agro Website Update",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet quis nibh posuere non tempor. Erat mattis gravida pulvinar nibh aliquam faucibus et magna.",
-    dueDate: "2026-10-12",
-    category: "Work",
-    completed: false,
-  },
-];
+import useTasks from "../hooks/useTasks";
 
 function MyTasksPage() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const { tasks, toggleTask, deleteTask } = useTasks();
   const [categoryFilter, setCategoryFilter] = useState<TaskCategory | "all">(
     "all",
   );
@@ -36,7 +15,7 @@ function MyTasksPage() {
     useState<CompletionFilter>("all");
 
   const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
+    return tasks.filter((task: { category: string; completed: boolean }) => {
       const matchesCategory =
         categoryFilter === "all" || task.category === categoryFilter;
       const matchesCompletion =
@@ -45,16 +24,6 @@ function MyTasksPage() {
       return matchesCategory && matchesCompletion;
     });
   }, [tasks, categoryFilter, completionFilter]);
-
-  function handleToggleComplete(id: string) {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
-    );
-  }
-
-  function handleDelete(id: string) {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
-  }
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-8">
@@ -91,12 +60,12 @@ function MyTasksPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {filteredTasks.map((task) => (
+          {filteredTasks.map((task: Task) => (
             <TaskCard
               key={task.id}
               task={task}
-              onToggleComplete={handleToggleComplete}
-              onDelete={handleDelete}
+              onToggleComplete={toggleTask}
+              onDelete={deleteTask}
             />
           ))}
         </div>

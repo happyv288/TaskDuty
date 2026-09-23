@@ -1,15 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import type { TaskFormValues } from "../types/task";
 import TaskForm from "../components/TaskForm";
+import useTasks from "../hooks/useTasks";
 
 function NewTaskPage() {
   const navigate = useNavigate();
+  const { addTask } = useTasks();
 
   function handleCreate(values: TaskFormValues) {
-    // TODO: replace with a POST /tasks call once the server is ready.
-    // TaskForm already validated `values` — this is the only spot that
-    // needs to change.
-    console.log("New task:", values);
+    addTask(values);
     navigate("/tasks");
   }
 

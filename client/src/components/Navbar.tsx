@@ -11,18 +11,22 @@ function Navbar() {
 
   return (
     <nav className="w-full bg-white border-b border-gray-200">
-      <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
+      <div className="max-w-5xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0">
-          <img src={taskdutyLogo} alt="TaskDuty" className="h-10 w-auto" />
+          <img
+            src={taskdutyLogo}
+            alt="TaskDuty"
+            className="h-7 sm:h-10 w-auto"
+          />
         </Link>
 
         {/* Navigation */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-3 sm:gap-8">
           {!isTaskForm && (
             <Link
               to="/tasks/new"
-              className="text-sm font-medium text-gray-700 hover:text-[#6C4FF3]"
+              className="text-xs sm:text-sm font-medium text-gray-700 hover:text-[#6C4FF3] whitespace-nowrap"
             >
               New Task
             </Link>
@@ -31,7 +35,7 @@ function Navbar() {
           {!isTasksList && (
             <Link
               to="/tasks"
-              className="text-sm font-medium text-gray-700 hover:text-[#6C4FF3]"
+              className="text-xs sm:text-sm font-medium text-gray-700 hover:text-[#6C4FF3] whitespace-nowrap"
             >
               All Task
             </Link>
@@ -42,7 +46,7 @@ function Navbar() {
             <img
               src={avatar}
               alt="User avatar"
-              className="h-10 w-10 rounded-full object-cover"
+              className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover"
             />
           </Link>
         </div>

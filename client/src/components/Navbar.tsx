@@ -41,11 +41,20 @@ function Navbar() {
             </Link>
           )}
 
+          {/* Login link */}
+          <Link
+            to="/login"
+            className="text-xs sm:text-sm font-semibold text-[#6C4FF3] hover:text-[#5A3FE0] whitespace-nowrap"
+          >
+            Login
+          </Link>
+
           {/* Avatar */}
-          <Link to="/tasks" className="shrink-0">
+          <Link to="/login" className="shrink-0">
             <img
               src={avatar}
-              alt="User avatar"
+              alt="Login"
+              title="Log in to TaskDuty"
               className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover"
             />
           </Link>

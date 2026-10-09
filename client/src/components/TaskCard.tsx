@@ -1,5 +1,5 @@
 import type { Task } from "../types/task";
-import { DeleteIcon, Pencil, Trash2 } from "lucide-react";
+import { DeleteIcon, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface TaskCardProps {
@@ -27,27 +27,43 @@ function formatDate(iso: string): string {
 // Purely presentational: renders one task and reports user actions
 // upward via callbacks. It never fetches, stores, or mutates task data
 // itself — the parent page owns that (local state today, an API later).
-export default function TaskCard({ task, onToggleComplete, onDelete }: TaskCardProps) {
+export default function TaskCard({
+  task,
+  onToggleComplete,
+  onDelete,
+}: TaskCardProps) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
           <button
             onClick={() => onToggleComplete(task.id)}
-            aria-label={task.completed ? "Mark as not completed" : "Mark as completed"}
+            aria-label={
+              task.completed ? "Mark as not completed" : "Mark as completed"
+            }
             className={`mt-1 w-5 h-5 shrink-0 rounded-full border-2 flex items-center justify-center ${
-              task.completed ? "bg-[#1E9E6B] border-[#1E9E6B]" : "bg-white border-gray-200"
+              task.completed
+                ? "bg-[#1E9E6B] border-[#1E9E6B]"
+                : "bg-white border-gray-200"
             }`}
           >
             {task.completed && (
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6.5L4.5 9L10 3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M2 6.5L4.5 9L10 3"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             )}
           </button>
 
           <div className="min-w-0">
-            <span className={`text-xs font-semibold ${categoryClasses[task.category]}`}>
+            <span
+              className={`text-xs font-semibold ${categoryClasses[task.category]}`}
+            >
               {task.category}
             </span>
             <h3
@@ -91,5 +107,3 @@ export default function TaskCard({ task, onToggleComplete, onDelete }: TaskCardP
     </div>
   );
 }
-
-

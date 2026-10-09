@@ -4,12 +4,23 @@ import authMiddleware, { AuthRequest } from "../middleware/authMiddleware";
 
 const router = Router();
 
-// GET all tasks for logged-in user
+// GET all tasks or search tasks for logged-in user
 router.get("/", authMiddleware, async (req: AuthRequest, res) => {
   try {
-    const tasks = await Task.find({
+    const search = String(req.query.search || "").trim();
+
+    const filter: Record<string, unknown> = {
       user: req.userId,
-    }).sort({ createdAt: -1 });
+    };
+
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const tasks = await Task.find(filter).sort({ createdAt: -1 });
 
     res.json(tasks);
   } catch (error) {

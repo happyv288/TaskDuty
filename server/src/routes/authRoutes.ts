@@ -63,7 +63,10 @@ router.post("/register", async (req, res) => {
 });
 
 // Login
+// Login
 router.post("/login", async (req, res) => {
+  console.log("LOGIN ROUTE REACHED");
+
   try {
     const { email, password } = req.body;
 
@@ -73,25 +76,43 @@ router.post("/login", async (req, res) => {
       });
     }
 
+    console.log("Looking for user:", email);
+
     const user = await User.findOne({ email });
+    console.log(
+      "User fields returned:",
+      user ? Object.keys(user.toObject()) : "No user",
+    );
+    console.log(
+      "Password field exists:",
+      user ? Boolean(user.password) : false,
+    );
 
     if (!user) {
+      console.log("User not found");
+
       return res.status(401).json({
         message: "Invalid email or password",
       });
     }
+
+    console.log("User found. Checking password...");
 
     const passwordMatches = await bcrypt.compare(password, user.password);
 
     if (!passwordMatches) {
+      console.log("Password does not match");
+
       return res.status(401).json({
         message: "Invalid email or password",
       });
     }
 
+    console.log("Password matches. Generating token...");
+
     const token = generateToken(user._id.toString());
 
-    res.json({
+    return res.json({
       message: "Login successful",
       token,
       user: {
@@ -101,8 +122,11 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("LOGIN ERROR:", error);
+
+    return res.status(500).json({
       message: "Login failed",
+      error: error instanceof Error ? error.message : String(error),
     });
   }
 });

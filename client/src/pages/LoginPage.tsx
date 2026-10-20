@@ -27,10 +27,26 @@ function LoginPage() {
         },
       );
 
-      const data = await response.json();
+      const responseText = await response.text();
+
+      let data: { message?: string; token?: string };
+
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error(
+          `Server returned an invalid response (HTTP ${response.status}). Please try again.`,
+        );
+      }
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed.");
+      }
+
+      if (!data.token) {
+        throw new Error(
+          "Login response did not include an authentication token.",
+        );
       }
 
       localStorage.setItem("taskduty_token", data.token);
